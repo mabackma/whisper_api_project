@@ -1,18 +1,50 @@
 import os
+from dotenv import load_dotenv
 from flask import Flask, request
 from flask_cors import CORS
 import whisper
 from openai import OpenAI
+from pathlib import Path
+
 
 app = Flask(__name__)
 CORS(app)
+load_dotenv()
+
+# chat-gpt
+client = OpenAI(api_key=os.getenv("CHAT_GPT_KEY"))
+
+def send_message(prompt):
+
+    chat_completion = client.chat.completions.create(
+        messages=[
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        model="gpt-3.5-turbo"
+    )
+
+    reply = chat_completion.choices[0].message.content
+    print(reply)
+
+    # TODO this part isn't working properly! Audio stops before reaching the end of audiofile
+    # convert reply to speech
+    speech_file_path = Path(__file__).parent / "speech.mp3"
+    response = client.audio.speech.create(
+        model="tts-1",
+        voice="alloy",
+        input=reply
+    )
+    response.stream_to_file(speech_file_path)
+
+    return reply
+
 
 # temporary folder to store uploaded file
 UPLOAD_FOLDER = 'C:/temp_whisper_uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-# chat-gpt
-client = OpenAI(api_key='<KEY>')
 
 @app.route('/', methods=['GET'])
 def hello_world():
@@ -56,7 +88,10 @@ def speech_to_text_api():
 
         # print the recognized text
         print(result.text)
-        return result.text
+
+        # get answer from chat-GPT
+        answer = send_message(result.text)
+        return answer
 
     except Exception as e:
         return f'Error: {e}'

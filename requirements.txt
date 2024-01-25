@@ -3,3 +3,5 @@ flask-cors
 openai-whisper
 openai
 setuptools-rust
+python-dotenv
+pathlib
