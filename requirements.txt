@@ -1,7 +1,8 @@
-flask
+flask[async]
 flask-cors
 openai-whisper
 openai
 setuptools-rust
 python-dotenv
 pathlib
+httpx
