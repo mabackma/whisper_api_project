@@ -2,6 +2,7 @@ import os
 from flask import Flask, request
 from flask_cors import CORS
 import whisper
+from openai import OpenAI
 
 app = Flask(__name__)
 CORS(app)
@@ -10,6 +11,8 @@ CORS(app)
 UPLOAD_FOLDER = 'C:/temp_whisper_uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+# chat-gpt
+client = OpenAI(api_key='<KEY>')
 
 @app.route('/', methods=['GET'])
 def hello_world():
@@ -41,11 +44,15 @@ def speech_to_text_api():
 
         # detect the spoken language
         _, probs = model.detect_language(mel)
+        print(f"filename: {audio_file.filename}")
         print(f"Detected language: {max(probs, key=probs.get)}")
 
         # decode the audio
         options = whisper.DecodingOptions(fp16 = False)
         result = whisper.decode(model, mel, options)
+
+        # TODO: translate the audio
+        # result = model.transcribe(audio, language='fi', task='translate', options=options)
 
         # print the recognized text
         print(result.text)
