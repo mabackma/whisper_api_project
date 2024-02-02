@@ -6,3 +6,7 @@ setuptools-rust
 python-dotenv
 pathlib
 httpx
+
+johnsnowlabs
+spark-nlp==5.2.2
+spark-nlp-jsl==5.2.1

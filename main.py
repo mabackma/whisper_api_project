@@ -46,7 +46,6 @@ async def send_message(prompt):
     )
     result.stream_to_file(speech_file_path)
 
-
     await text_to_speech(reply)
 
 
@@ -115,7 +114,7 @@ async def speech_to_text_api():
         print(f"Detected language: {max(probs, key=probs.get)}")
 
         # decode the audio
-        options = whisper.DecodingOptions(fp16 = False)
+        options = whisper.DecodingOptions(fp16=False)
         result = whisper.decode(model, mel, options)
 
         # print the recognized text
