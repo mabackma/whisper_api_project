@@ -7,6 +7,8 @@ python-dotenv
 pathlib
 httpx
 
-johnsnowlabs
+numpy
+pandas
+pyspark==3.1.2
 spark-nlp==5.2.2
-spark-nlp-jsl==5.2.1
+spark-nlp-jsl==5.2.1 --extra-index-url https://pypi.johnsnowlabs.com/5.2.1-ffc2b401994dc1c54ff36dc6e6557a8763900a80
